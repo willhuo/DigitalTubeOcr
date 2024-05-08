@@ -37,11 +37,10 @@
             pic1 = new PictureBox();
             tabPage2 = new TabPage();
             txtLog = new TextBox();
-            btnFushi = new Button();
-            btnOpen = new Button();
+            tabPage3 = new TabPage();
+            panel1 = new Panel();
             btnOcr = new Button();
             txtImgPath = new TextBox();
-            btnPengzhang = new Button();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -53,6 +52,7 @@
             ((System.ComponentModel.ISupportInitialize)pic2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pic1).BeginInit();
             tabPage2.SuspendLayout();
+            tabPage3.SuspendLayout();
             SuspendLayout();
             // 
             // splitContainer1
@@ -69,24 +69,22 @@
             // 
             // splitContainer1.Panel2
             // 
-            splitContainer1.Panel2.Controls.Add(btnPengzhang);
-            splitContainer1.Panel2.Controls.Add(btnFushi);
-            splitContainer1.Panel2.Controls.Add(btnOpen);
             splitContainer1.Panel2.Controls.Add(btnOcr);
             splitContainer1.Panel2.Controls.Add(txtImgPath);
-            splitContainer1.Size = new Size(1070, 496);
-            splitContainer1.SplitterDistance = 438;
+            splitContainer1.Size = new Size(1070, 520);
+            splitContainer1.SplitterDistance = 473;
             splitContainer1.TabIndex = 0;
             // 
             // tabControl1
             // 
             tabControl1.Controls.Add(tabPage1);
             tabControl1.Controls.Add(tabPage2);
+            tabControl1.Controls.Add(tabPage3);
             tabControl1.Dock = DockStyle.Fill;
             tabControl1.Location = new Point(0, 0);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(1070, 438);
+            tabControl1.Size = new Size(1070, 473);
             tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -95,7 +93,7 @@
             tabPage1.Location = new Point(4, 26);
             tabPage1.Name = "tabPage1";
             tabPage1.Padding = new Padding(3);
-            tabPage1.Size = new Size(1062, 408);
+            tabPage1.Size = new Size(1062, 443);
             tabPage1.TabIndex = 0;
             tabPage1.Text = "识别结果";
             tabPage1.UseVisualStyleBackColor = true;
@@ -114,7 +112,7 @@
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(1056, 402);
+            tableLayoutPanel1.Size = new Size(1056, 437);
             tableLayoutPanel1.TabIndex = 1;
             // 
             // pic3
@@ -122,7 +120,7 @@
             pic3.Dock = DockStyle.Fill;
             pic3.Location = new Point(707, 3);
             pic3.Name = "pic3";
-            pic3.Size = new Size(346, 396);
+            pic3.Size = new Size(346, 431);
             pic3.SizeMode = PictureBoxSizeMode.StretchImage;
             pic3.TabIndex = 2;
             pic3.TabStop = false;
@@ -132,7 +130,7 @@
             pic2.Dock = DockStyle.Fill;
             pic2.Location = new Point(355, 3);
             pic2.Name = "pic2";
-            pic2.Size = new Size(346, 396);
+            pic2.Size = new Size(346, 431);
             pic2.SizeMode = PictureBoxSizeMode.StretchImage;
             pic2.TabIndex = 1;
             pic2.TabStop = false;
@@ -142,7 +140,7 @@
             pic1.Dock = DockStyle.Fill;
             pic1.Location = new Point(3, 3);
             pic1.Name = "pic1";
-            pic1.Size = new Size(346, 396);
+            pic1.Size = new Size(346, 431);
             pic1.SizeMode = PictureBoxSizeMode.StretchImage;
             pic1.TabIndex = 0;
             pic1.TabStop = false;
@@ -153,7 +151,7 @@
             tabPage2.Location = new Point(4, 26);
             tabPage2.Name = "tabPage2";
             tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(1062, 408);
+            tabPage2.Size = new Size(1062, 399);
             tabPage2.TabIndex = 1;
             tabPage2.Text = "日志";
             tabPage2.UseVisualStyleBackColor = true;
@@ -165,32 +163,32 @@
             txtLog.Multiline = true;
             txtLog.Name = "txtLog";
             txtLog.ScrollBars = ScrollBars.Vertical;
-            txtLog.Size = new Size(1056, 402);
+            txtLog.Size = new Size(1056, 393);
             txtLog.TabIndex = 0;
             // 
-            // btnFushi
+            // tabPage3
             // 
-            btnFushi.Location = new Point(739, 19);
-            btnFushi.Name = "btnFushi";
-            btnFushi.Size = new Size(75, 23);
-            btnFushi.TabIndex = 3;
-            btnFushi.Text = "腐蚀";
-            btnFushi.UseVisualStyleBackColor = true;
-            btnFushi.Click += btnFushi_Click;
+            tabPage3.Controls.Add(panel1);
+            tabPage3.Location = new Point(4, 26);
+            tabPage3.Name = "tabPage3";
+            tabPage3.Padding = new Padding(3);
+            tabPage3.Size = new Size(1062, 399);
+            tabPage3.TabIndex = 2;
+            tabPage3.Text = "tabPage3";
+            tabPage3.UseVisualStyleBackColor = true;
             // 
-            // btnOpen
+            // panel1
             // 
-            btnOpen.Location = new Point(658, 19);
-            btnOpen.Name = "btnOpen";
-            btnOpen.Size = new Size(75, 23);
-            btnOpen.TabIndex = 2;
-            btnOpen.Text = "打开";
-            btnOpen.UseVisualStyleBackColor = true;
-            btnOpen.Click += btnOpen_Click;
+            panel1.AutoScroll = true;
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(3, 3);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(1056, 393);
+            panel1.TabIndex = 0;
             // 
             // btnOcr
             // 
-            btnOcr.Location = new Point(973, 19);
+            btnOcr.Location = new Point(648, 8);
             btnOcr.Name = "btnOcr";
             btnOcr.Size = new Size(75, 23);
             btnOcr.TabIndex = 1;
@@ -200,27 +198,17 @@
             // 
             // txtImgPath
             // 
-            txtImgPath.Location = new Point(21, 19);
+            txtImgPath.Location = new Point(21, 8);
             txtImgPath.Name = "txtImgPath";
             txtImgPath.Size = new Size(621, 23);
             txtImgPath.TabIndex = 0;
             txtImgPath.MouseDown += txtImgPath_MouseDown;
             // 
-            // btnPengzhang
-            // 
-            btnPengzhang.Location = new Point(820, 19);
-            btnPengzhang.Name = "btnPengzhang";
-            btnPengzhang.Size = new Size(75, 23);
-            btnPengzhang.TabIndex = 4;
-            btnPengzhang.Text = "膨胀";
-            btnPengzhang.UseVisualStyleBackColor = true;
-            btnPengzhang.Click += btnPengzhang_Click;
-            // 
             // HomeForm
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1070, 496);
+            ClientSize = new Size(1070, 520);
             Controls.Add(splitContainer1);
             Name = "HomeForm";
             StartPosition = FormStartPosition.CenterScreen;
@@ -239,6 +227,7 @@
             ((System.ComponentModel.ISupportInitialize)pic1).EndInit();
             tabPage2.ResumeLayout(false);
             tabPage2.PerformLayout();
+            tabPage3.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -255,8 +244,7 @@
         private TableLayoutPanel tableLayoutPanel1;
         private PictureBox pic3;
         private PictureBox pic2;
-        private Button btnOpen;
-        private Button btnFushi;
-        private Button btnPengzhang;
+        private TabPage tabPage3;
+        private Panel panel1;
     }
 }

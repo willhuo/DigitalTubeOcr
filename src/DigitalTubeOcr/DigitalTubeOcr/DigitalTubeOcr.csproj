@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\Administrator\.nuget\packages\dijing.serilogext\1.2.3\contentFiles\any\net8.0\README.md" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dijing.SerilogExt" Version="1.2.3" />
     <PackageReference Include="OpenCvSharp4" Version="4.9.0.20240103" />
     <PackageReference Include="OpenCvSharp4.Extensions" Version="4.9.0.20240103" />
