@@ -1,5 +1,6 @@
 using OpenCvSharp;
 using OpenCvSharp.Internal.Vectors;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -10,10 +11,8 @@ namespace DigitalTubeOcr
     public partial class HomeForm : Form
     {
         private string _imgPath { get; set; }
-        private string _saveFolder = "data";
-        private Mat _image { get; set; }
-        private Mat _hsvImage { get; set; }
-        private Mat _kernel = Cv2.GetStructuringElement(MorphShapes.Rect, new OpenCvSharp.Size(10, 10));
+        private string _saveFolder { get; set; } = "data";
+        private Stopwatch _sw { get; set; }=new Stopwatch();
 
 
         public HomeForm()
@@ -40,6 +39,14 @@ namespace DigitalTubeOcr
 
         private void TemperatureRoiCut(string path)
         {
+            //计时开始
+            _sw.Stop();
+            _sw.Reset();
+            _sw.Start();
+
+            //图像置空
+            ClearPictureboxs();
+
             //图像地址
             var imgPath = string.IsNullOrEmpty(path) ? "C:\\willhuo\\DigitalTubeOcr\\doc\\3.jpg" : path;
             var imgName = Path.GetFileNameWithoutExtension(imgPath);
@@ -54,18 +61,21 @@ namespace DigitalTubeOcr
                 return;
             }
 
-            //Blur方法对图像进行滤波
-            Mat blurImage = new Mat();
-            Cv2.Blur(image, blurImage, new OpenCvSharp.Size(10, 10));
-            Serilog.Log.Information("滤波完成");
+            //窗口1显示
+            ShowImage(OpenCvSharp.Extensions.BitmapConverter.ToBitmap(image), 1);
+
+            ////Blur方法对图像进行滤波
+            //Mat blurImage = new Mat();
+            //Cv2.Blur(image, blurImage, new OpenCvSharp.Size(10, 10));
+            //Serilog.Log.Information("滤波完成");
 
             //保存原始图片和滤波图片
             Cv2.ImWrite(Path.Combine(_saveFolder, $"{imgName}_image.jpg"), image);
-            Cv2.ImWrite(Path.Combine(_saveFolder, $"{imgName}_blurImage.jpg"), blurImage);
+            //Cv2.ImWrite(Path.Combine(_saveFolder, $"{imgName}_blurImage.jpg"), blurImage);
 
             // 将图像转换为 HSV 颜色空间
             Mat hsvImage = new Mat();
-            Cv2.CvtColor(blurImage, hsvImage, ColorConversionCodes.BGR2HSV);
+            Cv2.CvtColor(image, hsvImage, ColorConversionCodes.BGR2HSV);
             Cv2.ImWrite(Path.Combine(_saveFolder, $"{imgName}_hsvImage.jpg"), hsvImage);
 
             // 定义红色的 HSV 范围
@@ -117,6 +127,8 @@ namespace DigitalTubeOcr
             int rectCount = 0;
             Scalar color = new Scalar(0, 255, 0);
             Mat image2 = image.Clone();
+            byte minHSV = 255;
+            byte maxHSV = 0;
             for (int i = 0; i < contours.Length; i++)
             {
                 // 轮廓面积
@@ -156,6 +168,19 @@ namespace DigitalTubeOcr
 
                 //过滤后的点集追加到集合
                 leftContours.Add(contours[i]);
+
+                foreach (var point in contours[i])
+                {
+                    var pixel = hsvImage.At<Vec3b>(point.Y, point.X);
+                    if (pixel.Item0 < minHSV)                    
+                        minHSV=pixel.Item0;                    
+                    if (pixel.Item0 > maxHSV)
+                        maxHSV = pixel.Item0;
+                }
+
+                // 打印最小和最大的 HSV 值
+                Serilog.Log.Information("Min HSV: " + minHSV);
+                Serilog.Log.Information("Max HSV: " + maxHSV);
             }
             Serilog.Log.Information("过滤后的轮廓数量：{0}", rectCount);
             Cv2.ImWrite(Path.Combine(_saveFolder, $"{imgName}_image_rect_{rectCount}.jpg"), image2);
@@ -163,7 +188,10 @@ namespace DigitalTubeOcr
             //检测轮廓情况，是否是1个或者是相近的2个（执行合并）,否则报错。
             if(leftContours.Count>2)
             {
+                //窗口2显示
+                ShowImage(OpenCvSharp.Extensions.BitmapConverter.ToBitmap(image2), 2);
                 Serilog.Log.Warning("温度数据区域识别失败");
+                ResultPrint("温度数据区域识别失败");
                 return;
             }
 
@@ -181,22 +209,35 @@ namespace DigitalTubeOcr
             Cv2.Rectangle(image3, mergedRect, color, 2);
             Cv2.ImWrite(Path.Combine(_saveFolder, $"{imgName}_mergedimage.jpg"), image3);
 
+            //窗口2显示
+            ShowImage(OpenCvSharp.Extensions.BitmapConverter.ToBitmap(image3), 2);
+
             //裁剪出温度数据小图片
             Mat roi = new Mat(image, mergedRect);
             Cv2.ImWrite(Path.Combine(_saveFolder, $"{imgName}_roi.jpg"), roi);
+
+            //窗口3显示
+            ShowImage(OpenCvSharp.Extensions.BitmapConverter.ToBitmap(roi), 3);
 
             //结束
             image.Dispose();
             image2.Dispose();
             image3.Dispose();
-            blurImage.Dispose();
+            //blurImage.Dispose();
             hsvImage.Dispose();
             mask1.Dispose();
             mask2.Dispose();
             mask.Dispose();
             redRegions.Dispose();
             roi.Dispose();
-            Serilog.Log.Information("结束");
+
+            //结束
+            _sw.Stop();
+
+            //结果打印
+            var msg = $"识别完成，耗时：{_sw.ElapsedMilliseconds}ms";
+            Serilog.Log.Information(msg);
+            ResultPrint(msg);
         }
 
         private void Batch()
@@ -237,6 +278,17 @@ namespace DigitalTubeOcr
             return new Rect(minX, minY, maxX - minX, maxY - minY);
         }
 
+        private void ClearPictureboxs()
+        {
+            pic1.Invoke(new Action(() =>
+            {
+                pic1.Image = null;
+                pic2.Image = null;
+                pic3.Image = null;
+                labResult.Text = "等待执行";
+            }));
+        }
+
         private void ShowImage(Bitmap img, int location)
         {
             switch (location)
@@ -268,6 +320,13 @@ namespace DigitalTubeOcr
             }
         }
 
+        private void ResultPrint(string msg)
+        {
+            labResult.Invoke(new Action(() =>
+            {
+                labResult.Text = msg;
+            }));
+        }
 
         private void txtImgPath_MouseDown(object sender, MouseEventArgs e)
         {
